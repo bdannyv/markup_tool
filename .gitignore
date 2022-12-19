@@ -1,2 +1,10 @@
 venv/
 .idea/
+
+issues.md
+
+.env
+
+postgresql/
+
+__pycache__
