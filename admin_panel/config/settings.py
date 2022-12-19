@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k3a2-a@n&@&ed7v6v-^x54*gi*4v3z^yh78w6iydxoso%mkn%b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'image_markups.apps.ImageMarkupConfig'
+    'image_markup.apps.ImageMarkupConfig'
 ]
 
 MIDDLEWARE = [
@@ -77,14 +77,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': ...,
-        'USER': ...,
-        'PASSWORD': ...,
-        'HOST': ...,
-        'PORT': ...,
-        'OPTIONS': {
-           'options': '-c search_path=public,content'
-        }
+        'NAME': os.environ.get('DB_NAME', 'mark'),
+        'USER': os.environ.get('DB_USER', 'admin'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'pass'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', 5432)
     }
 }
 
@@ -124,7 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
