@@ -10,14 +10,14 @@ class ImageClasses(models.IntegerChoices):
     CAT = 2
 
 
-class ImageTable(models.Model, UUIDMixin, TimeStampMixin):
+class ImageTable(UUIDMixin, TimeStampMixin, models.Model):
     class Meta:
         db_table = "image_storage"
 
     image = models.ImageField(null=False, blank=False, upload_to='images/')
 
 
-class Label(models.Model, UUIDMixin, TimeStampMixin):
+class Label(UUIDMixin, TimeStampMixin, models.Model):
     class Meta:
         db_table = 'image_label'
 
