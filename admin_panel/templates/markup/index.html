@@ -1,0 +1,13 @@
+<h1>Markup statistics</h1>
+
+<h2>Total number of objects: {{ obj_total }}</h2>
+<h2>Number of labeled: {{ labeled }}</h2>
+<h2>
+    <ul>
+        {% for class in classes %}
+        <li>{{ class.type__name }}: {{class.id__count}}</li>
+        {% endfor %}
+    </ul>
+</h2>
+
+<a href="{% url 'admin:index' %}">Admin Panel Homepage</a>

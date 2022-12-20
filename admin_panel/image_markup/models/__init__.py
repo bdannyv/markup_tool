@@ -1,1 +1,1 @@
-from .models import ImageTable, Label
+from .models import ImageClass, ImageTable, Label
