@@ -1,6 +1,5 @@
-from django.urls import path
-from image_markup import views
+from django.urls import include, path
 
 urlpatterns = [
-    path('statistics/', views.my_view, name='stat'),
+    path('v1/', include('image_markup.api.v1.urls')),
 ]
