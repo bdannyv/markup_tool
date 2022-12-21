@@ -12,3 +12,37 @@ services:
       POSTGRES_HOST: $DB_HOST
     volumes:
       - ./postgresql/data:/var/lib/postgresql/data
+    networks:
+      - markup
+
+  admin-panel:
+    build:
+      context: ./
+      dockerfile: ./docker/admin_panel/Dockerfile
+    ports:
+      - '8000:8000'
+    environment:
+      DB_NAME: $DB_NAME
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_HOST: $DB_HOST
+    hostname: $LABEL_SERVICE_HOST
+    networks:
+      - markup
+    volumes:
+      - ./admin_panel/media:/app/media
+
+  telegram-bot:
+    build:
+      context: ./
+      dockerfile: ./docker/bot/Dockerfile
+    environment:
+      BOT_TOKEN: $BOT_TOKEN
+      LABEL_SERVICE_HOST: $LABEL_SERVICE_HOST
+      LABEL_SERVICE_PORT: $LABEL_SERVICE_PORT
+    networks:
+      - markup
+
+
+networks:
+  markup:

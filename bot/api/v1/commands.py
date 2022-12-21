@@ -3,9 +3,9 @@ import json
 import aiohttp
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.types import InlineKeyboardButton
 from api.v1 import buttons as kb
-from api.v1.buttons import (InlineKeyboardButton, image_classes,  # noqa
-                            inline_kb1)
+from api.v1.buttons import image_classes, inline_kb1  # noqa
 from bot_config import app_config
 from core import dp
 
@@ -17,9 +17,8 @@ async def retrieve_classes():
                 f"http://{app_config.label_service.host}:{app_config.label_service.port}/markup/v1/class/"
         ) as response:
             if response.status == 200:
-                classes = json.loads(await response.content.read())
-                for cl in classes:
-                    image_classes.append(cl)
+                image_classes = json.loads(await response.content.read())
+                for cl in image_classes:
                     inline_btn = InlineKeyboardButton(cl, callback_data=cl)
                     inline_kb1.add(inline_btn)
 
