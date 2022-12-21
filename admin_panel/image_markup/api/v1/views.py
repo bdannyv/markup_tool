@@ -1,6 +1,5 @@
 # Create your views here.
 import json
-import logging
 import os
 
 from config.settings import MEDIA_ROOT
@@ -30,6 +29,20 @@ def statistics_view(request):
             'classes': test,
         },
         template_name='markup/index.html'
+    )
+
+
+@require_http_methods(['GET'])
+def get_classes(request):
+    q = ImageClass.objects.values('name').all()
+
+    if not q:
+        return response.HttpResponse(status=204)
+
+    return response.HttpResponse(
+        status=200,
+        content_type='application/json',
+        content=json.dumps([row['name'] for row in q])
     )
 
 
@@ -63,7 +76,6 @@ def get_image(request, id):
 @request_body_validation(model=schemas.LabelInputBaseModel)
 def labeled_image(request, body: schemas.LabelInputBaseModel):
     """Label image view"""
-    logging.error('INSIDE VIEW')
     i_class = ImageClass.objects.filter(name=body.type).first()
     if not i_class:
         return response.HttpResponse(

@@ -5,5 +5,6 @@ urlpatterns = [
     path('statistics/', views.statistics_view, name='stat'),
     path('unlabeled/', views.get_unlabeled_image_id, name='unlabeled-image'),
     path('image/<uuid:id>', views.get_image, name='get-image'),
-    path('labeled/', views.labeled_image, name='lebeled-message')
+    path('labeled/', views.labeled_image, name='lebeled-message'),
+    path('class/', views.get_classes, name='image-classes')
 ]

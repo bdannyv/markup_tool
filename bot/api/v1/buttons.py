@@ -1,5 +1,9 @@
+import json
+
+import aiohttp
 from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
                            KeyboardButton, ReplyKeyboardMarkup)
+from bot_config import app_config
 
 # Common buttons
 inline_cancel = KeyboardButton('Cancel')
@@ -22,8 +26,17 @@ inline_singin = KeyboardButton('Submit')
 proceed = ReplyKeyboardMarkup().row(inline_singin).row(inline_cancel)
 
 # markups
+
 inline_kb1 = InlineKeyboardMarkup()
-inline_cat = InlineKeyboardButton('Cat', callback_data='Cat')
-inline_dog = InlineKeyboardButton('Dog', callback_data='Dog')
-inline_catdog = InlineKeyboardButton('CatDog', callback_data='CatDog')
-inline_kb1.add(inline_cat).add(inline_catdog).add(inline_dog)
+
+
+async def retrieve_classes(incognito):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+                f"http://{app_config.label_service.host}:{app_config.label_service.port}/markup/v1/class/"
+        ) as response:
+            if response.status == 200:
+                class_list = json.loads(await response.content.read())
+                for cl in class_list:
+                    inline_btn = InlineKeyboardButton(cl, callback_data=cl)
+                    inline_kb1.add(inline_btn)
