@@ -6,7 +6,7 @@ from api.v1.handlers import authentication as auth  # noqa
 from api.v1.handlers import markup  # noqa
 from core import dp
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)
 
 
 if __name__ == '__main__':

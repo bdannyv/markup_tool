@@ -10,6 +10,7 @@ from bot_config import app_config
 from core import dp
 
 
+# OMG
 async def retrieve_classes():
     global image_classes
     async with aiohttp.ClientSession() as session:
@@ -17,10 +18,12 @@ async def retrieve_classes():
                 f"http://{app_config.label_service.host}:{app_config.label_service.port}/markup/v1/class/"
         ) as response:
             if response.status == 200:
-                image_classes = json.loads(await response.content.read())
-                for cl in image_classes:
-                    inline_btn = InlineKeyboardButton(cl, callback_data=cl)
-                    inline_kb1.add(inline_btn)
+                cls = json.loads(await response.content.read())
+                for cl in cls:
+                    if cl not in image_classes:
+                        image_classes.add(cl)
+                        inline_btn = InlineKeyboardButton(cl, callback_data=cl)
+                        inline_kb1.add(inline_btn)
 
 
 @dp.message_handler(commands=['start'], state='*')

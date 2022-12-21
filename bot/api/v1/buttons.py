@@ -24,4 +24,4 @@ proceed = ReplyKeyboardMarkup().row(inline_singin).row(inline_cancel)
 # markups
 
 inline_kb1 = InlineKeyboardMarkup()
-image_classes = []
+image_classes = set()
