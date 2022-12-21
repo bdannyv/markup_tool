@@ -10,10 +10,10 @@ from pydantic import EmailError, EmailStr
 from states import authentication, user
 
 
-@dp.message_handler(lambda c: c.text == 'Cancel', state='*')
+@dp.message_handler(lambda c: c.text in ('Cancel', "Exit"), state='*')
 async def cancel_button(message: types.Message, state: FSMContext):
     await state.reset_state()
-    await message.reply('Canceled', reply_markup=greet_kb)
+    await message.answer(message.text, reply_markup=greet_kb)
 
 
 @dp.message_handler(lambda c: c.text == 'Sign Up', state='*')
@@ -68,8 +68,7 @@ async def signup(message: types.Message, state: FSMContext):
             }),
         ) as response:
             if response.status == 200:
-                await state.reset_data()
-                await state.set_state(user.UserStates.AUTHENTICATED)
+                await state.set_state(user.UserStates.authenticated)
                 msg = "Success"
             else:
                 await state.reset_state()
@@ -116,8 +115,7 @@ async def signin(message: types.Message, state: FSMContext):
                 })
         ) as response:
             if response.status == 200:
-                await state.reset_data()
-                await state.set_state(user.UserStates.AUTHENTICATED)
+                await state.set_state(user.UserStates.authenticated)
                 msg = 'Success'
             else:
                 await state.reset_state()

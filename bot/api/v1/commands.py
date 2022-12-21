@@ -4,7 +4,7 @@ from api.v1 import buttons as kb
 from core import dp
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands=['start'], state='*')
 async def process_start_command(message: types.Message, state: FSMContext):
     await state.reset_state()
     await message.reply(
@@ -12,7 +12,7 @@ async def process_start_command(message: types.Message, state: FSMContext):
     )
 
 
-@dp.message_handler(commands=['stop'])
+@dp.message_handler(commands=['stop'], state='*')
 async def process_stop_command(message: types.Message, state: FSMContext):
     await state.reset_state()
     await message.reply(
@@ -20,7 +20,7 @@ async def process_stop_command(message: types.Message, state: FSMContext):
     )
 
 
-@dp.message_handler(commands=['help'])
+@dp.message_handler(commands=['help'], state='*')
 async def process_help_command(message: types.Message):
     await message.reply(
         "Main purpose of this bot is image labeling\nAvailable command /start, /stop, /help.\n"
@@ -29,6 +29,11 @@ async def process_help_command(message: types.Message):
     )
 
 
-@dp.message_handler(commands=['reset_state'])
+@dp.message_handler(commands=['reset_state'], state='*')
 async def reset_state(message: types.Message, state: FSMContext):
     await state.reset_state()
+
+
+@dp.message_handler(commands=['state'], state='*')
+async def get_state(message: types.Message, state: FSMContext):
+    await message.reply(await state.get_state() or "No state")

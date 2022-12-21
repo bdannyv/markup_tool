@@ -1,5 +1,6 @@
 # Create your views here.
 import json
+import logging
 import os
 
 from config.settings import MEDIA_ROOT
@@ -62,8 +63,8 @@ def get_image(request, id):
 @request_body_validation(model=schemas.LabelInputBaseModel)
 def labeled_image(request, body: schemas.LabelInputBaseModel):
     """Label image view"""
+    logging.error('INSIDE VIEW')
     i_class = ImageClass.objects.filter(name=body.type).first()
-
     if not i_class:
         return response.HttpResponse(
             status=400,
@@ -72,7 +73,6 @@ def labeled_image(request, body: schemas.LabelInputBaseModel):
         )
 
     img = ImageTable.objects.filter(id=body.image_id).first()
-
     if not img:
         return response.HttpResponse(
             status=400,
@@ -80,7 +80,7 @@ def labeled_image(request, body: schemas.LabelInputBaseModel):
             content_type='application/json'
         )
 
-    user = User.objects.filter(pk=body.user_id).first()
+    user = User.objects.filter(username=body.user_name).first()
     if not user:
         return response.HttpResponse(
             status=401,

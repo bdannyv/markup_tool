@@ -1,4 +1,5 @@
 import json
+import logging
 from functools import wraps
 from typing import Type
 
@@ -16,6 +17,7 @@ def request_body_validation(model: Type[BaseModel]):
             try:
                 validated = model(**body)
             except ValidationError:
+                logging.exception('HERE')
                 return response.HttpResponse(status=400)
 
             kwargs['body'] = validated
