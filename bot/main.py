@@ -1,7 +1,8 @@
 import logging
 
 from aiogram import executor
-from api.v1.commands import authentication as auth  # noqa
+from api.v1 import commands, handlers  # noqa
+from api.v1.handlers import authentication as auth  # noqa
 from core import dp
 
 logging.basicConfig(level=logging.DEBUG)

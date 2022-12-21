@@ -1,0 +1,49 @@
+@startuml
+actor User
+participant Bot
+participant Service
+
+User -> Bot: /start
+Bot -> User: actions
+note right: /register, \n/singin, \n/exit
+
+alt /register
+    User -> Bot: register request
+    Bot -> User: asking for cred
+    User -> Bot: creds
+    note left: username, \npassword, \nemail
+    Bot -> Service: register request redirection
+    note left: username, \npassword, \nemail, \nuser_id
+
+    alt New User
+        Service -> Bot: 200 OK
+        note right: username, \npassword
+        Bot -> Bot: switch state
+        Bot -> User: password, username
+    else User exists
+        Service -> Bot: 409 Conflict
+        Bot -> User: notification
+    end
+
+else /singin
+    User -> Bot: signin request
+    Bot -> User: asking for cred
+    note left: username, \npassword
+    Bot -> Service: signin request redirection
+    note left: username, \npassword
+
+    alt Successful authentication
+        Service -> Bot: 200 OK
+        Bot -> Bot: switch state
+        Bot -> User: 200 OK
+    else Failed Authentication
+        Service -> Bot: 401 OK
+        Bot -> User: notification
+    end
+else \exit
+    User -> Bot: exit request
+    Bot -> Bot: switch state
+    Bot -> User: OK
+end
+
+@enduml
