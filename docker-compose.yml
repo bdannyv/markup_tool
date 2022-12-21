@@ -26,6 +26,7 @@ services:
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
       DB_HOST: $DB_HOST
+      DJANGO_SECRET: $DJANGO_SECRET
     hostname: $LABEL_SERVICE_HOST
     networks:
       - markup
