@@ -1,11 +1,32 @@
+import json
+
+import aiohttp
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from api.v1 import buttons as kb
+from api.v1.buttons import (InlineKeyboardButton, image_classes,  # noqa
+                            inline_kb1)
+from bot_config import app_config
 from core import dp
+
+
+async def retrieve_classes():
+    global image_classes
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+                f"http://{app_config.label_service.host}:{app_config.label_service.port}/markup/v1/class/"
+        ) as response:
+            if response.status == 200:
+                classes = json.loads(await response.content.read())
+                for cl in classes:
+                    image_classes.append(cl)
+                    inline_btn = InlineKeyboardButton(cl, callback_data=cl)
+                    inline_kb1.add(inline_btn)
 
 
 @dp.message_handler(commands=['start'], state='*')
 async def process_start_command(message: types.Message, state: FSMContext):
+    await retrieve_classes()
     await state.reset_state()
     await message.reply(
         f"Hi, {message.from_user.first_name} {message.from_user.last_name}!", reply_markup=kb.greet_kb

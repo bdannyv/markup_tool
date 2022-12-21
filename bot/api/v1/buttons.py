@@ -1,9 +1,5 @@
-import json
-
-import aiohttp
-from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
-                           KeyboardButton, ReplyKeyboardMarkup)
-from bot_config import app_config
+from aiogram.types import (InlineKeyboardMarkup, KeyboardButton,
+                           ReplyKeyboardMarkup)
 
 # Common buttons
 inline_cancel = KeyboardButton('Cancel')
@@ -28,15 +24,4 @@ proceed = ReplyKeyboardMarkup().row(inline_singin).row(inline_cancel)
 # markups
 
 inline_kb1 = InlineKeyboardMarkup()
-
-
-async def retrieve_classes(incognito):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-                f"http://{app_config.label_service.host}:{app_config.label_service.port}/markup/v1/class/"
-        ) as response:
-            if response.status == 200:
-                class_list = json.loads(await response.content.read())
-                for cl in class_list:
-                    inline_btn = InlineKeyboardButton(cl, callback_data=cl)
-                    inline_kb1.add(inline_btn)
+image_classes = []

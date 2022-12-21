@@ -3,7 +3,7 @@ import json
 import aiohttp
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from api.v1.buttons import greet_kb, inline_kb1
+from api.v1.buttons import greet_kb, image_classes, inline_kb1
 from bot_config import app_config
 from core import bot, dp
 
@@ -55,7 +55,7 @@ async def labeling(message: types.Message, state: FSMContext):
     await send_image(state=state, chat_id=message.from_user.id)
 
 
-@dp.callback_query_handler(lambda c: c.data in ('Cat', 'Dog', 'CatDog'), state="*")
+@dp.callback_query_handler(lambda c: c.data in image_classes, state="*")
 async def process_callback_button1(callback_query: types.CallbackQuery, state: FSMContext):
     state_check = await state.get_state()
 
