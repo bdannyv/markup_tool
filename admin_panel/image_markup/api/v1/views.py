@@ -35,7 +35,7 @@ def statistics_view(request):
 @require_http_methods(["GET"])
 def get_unlabeled_image_id(request):
     """Get unlabeled message"""
-    q = ImageTable.objects.filter(image_class__isnull=True).values('id').first()
+    q = ImageTable.objects.filter(image_class__isnull=True).first()
 
     if not q:
         return response.HttpResponse(status=204)
@@ -43,7 +43,7 @@ def get_unlabeled_image_id(request):
     return response.HttpResponse(
         status=200,
         content_type="application/json",
-        content=json.dumps({'id': str(q['id'])}))
+        content=json.dumps({'id': str(q.id), "name": q.image.name}))
 
 
 @require_http_methods(["GET"])

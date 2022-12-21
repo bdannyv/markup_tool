@@ -1,7 +1,7 @@
 import json
 
 from authapp.api.v1.schemas import SignInBodyModel, SignUpBodyModel
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, models
 from django.http import response
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -13,19 +13,16 @@ from utils.input_validation import request_body_validation
 @request_body_validation(model=SignUpBodyModel)
 def signup(request, body: SignUpBodyModel):
 
-    user_id = body.user_id
-    username = body.username
-    password = body.password  # TODO: Is it legal?
-    email = body.email
-
     # TODO: Too many responsibilities
-    user = User.objects.filter(id=user_id)
+    user = models.User.objects.filter(id=body.user_id)
     if user:
         return response.HttpResponse(
             status=409, content=json.dumps({'message': 'already signed up'}), content_type="application/json"
         )
 
-    User.objects.create_user(username=username, password=password, email=email, pk=user_id)
+    models.User.objects.create_user(
+        username=body.username, password=body.password, email=body.email, pk=body.user_id
+    )
 
     return response.HttpResponse(
         status=200, content=json.dumps({'message': 'successfully signed up'}), content_type="application/json"
@@ -36,16 +33,11 @@ def signup(request, body: SignUpBodyModel):
 @require_http_methods(['POST'])
 @request_body_validation(model=SignInBodyModel)
 def signin(request, body: SignInBodyModel):
-
-    user_id = body.user_id
-    password = body.password  # TODO: Is it legal?
-
-    # TODO: Too many responsibilities
-    user = User.objects.filter(pk=user_id)
+    user = models.User.objects.filter(pk=body.user_id)
     if not user.count():
         return response.HttpResponse(status=401)
 
-    authentication = user.first().check_password(raw_password=password)
+    authentication = authenticate(username=body.username, password=body.password)
     if not authentication:
         return response.HttpResponse(status=401)
 
