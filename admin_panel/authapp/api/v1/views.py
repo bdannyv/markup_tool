@@ -1,22 +1,22 @@
 import json
-import logging
 
+from authapp.api.v1.schemas import SignInBodyModel, SignUpBodyModel
 from django.contrib.auth.models import User
 from django.http import response
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from utils.input_validation import request_body_validation
 
 
 @csrf_exempt
 @require_http_methods(['POST'])
-def signup(request):
-    body_unicode = request.body.decode('utf-8')  # TODO: make a decorator to parse and validate input
-    body = json.loads(body_unicode)
+@request_body_validation(model=SignUpBodyModel)
+def signup(request, body: SignUpBodyModel):
 
-    user_id = body['user_id']
-    username = body['username']
-    password = body['password']  # TODO: Is it legal?
-    email = body['email']
+    user_id = body.user_id
+    username = body.username
+    password = body.password  # TODO: Is it legal?
+    email = body.email
 
     # TODO: Too many responsibilities
     user = User.objects.filter(id=user_id)
@@ -34,14 +34,11 @@ def signup(request):
 
 @csrf_exempt
 @require_http_methods(['POST'])
-def signin(request):
-    body_unicode = request.body.decode('utf-8')  # TODO: make a decorator to parse and validate input
-    logging.error(body_unicode)
-    body = json.loads(body_unicode)
-    logging.error(body)
+@request_body_validation(model=SignInBodyModel)
+def signin(request, body: SignInBodyModel):
 
-    user_id = body['user_id']
-    password = body['password']  # TODO: Is it legal?
+    user_id = body.user_id
+    password = body.password  # TODO: Is it legal?
 
     # TODO: Too many responsibilities
     user = User.objects.filter(pk=user_id)
