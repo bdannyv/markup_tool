@@ -14,15 +14,13 @@ from utils.input_validation import request_body_validation
 def signup(request, body: SignUpBodyModel):
 
     # TODO: Too many responsibilities
-    user = models.User.objects.filter(id=body.user_id)
+    user = models.User.objects.filter(username=body.username)
     if user:
         return response.HttpResponse(
             status=409, content=json.dumps({'message': 'already signed up'}), content_type="application/json"
         )
 
-    models.User.objects.create_user(
-        username=body.username, password=body.password, email=body.email, pk=body.user_id
-    )
+    models.User.objects.create_user(username=body.username, password=body.password, email=body.email)
 
     return response.HttpResponse(
         status=200, content=json.dumps({'message': 'successfully signed up'}), content_type="application/json"
@@ -33,7 +31,7 @@ def signup(request, body: SignUpBodyModel):
 @require_http_methods(['POST'])
 @request_body_validation(model=SignInBodyModel)
 def signin(request, body: SignInBodyModel):
-    user = models.User.objects.filter(pk=body.user_id)
+    user = models.User.objects.filter(username=body.username)
     if not user.count():
         return response.HttpResponse(status=401)
 

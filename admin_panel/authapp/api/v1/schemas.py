@@ -2,7 +2,6 @@ from pydantic import BaseModel, EmailStr
 
 
 class SignInBodyModel(BaseModel):
-    user_id: int
     username: str
     password: str
 
