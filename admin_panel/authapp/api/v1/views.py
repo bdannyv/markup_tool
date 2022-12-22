@@ -13,7 +13,6 @@ from utils.input_validation import request_body_validation
 @request_body_validation(model=SignUpBodyModel)
 def signup(request, body: SignUpBodyModel):
 
-    # TODO: Too many responsibilities
     user = models.User.objects.filter(username=body.username)
     if user:
         return response.HttpResponse(
@@ -32,6 +31,7 @@ def signup(request, body: SignUpBodyModel):
 @request_body_validation(model=SignInBodyModel)
 def signin(request, body: SignInBodyModel):
     user = models.User.objects.filter(username=body.username)
+
     if not user.count():
         return response.HttpResponse(status=401)
 

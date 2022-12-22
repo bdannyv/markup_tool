@@ -34,6 +34,7 @@ def statistics_view(request):
 
 @require_http_methods(['GET'])
 def get_classes(request):
+    """Get all image classes"""
     q = ImageClass.objects.values('name').all()
 
     if not q:
@@ -62,6 +63,7 @@ def get_unlabeled_image_id(request):
 
 @require_http_methods(["GET"])
 def get_image(request, id):
+    """Get image by id"""
     q = ImageTable.objects.filter(id=id).values('image').first()
 
     if not q:
@@ -75,7 +77,7 @@ def get_image(request, id):
 @require_http_methods(['POST'])
 @request_body_validation(model=schemas.LabelInputBaseModel)
 def labeled_image(request, body: schemas.LabelInputBaseModel):
-    """Label image view"""
+    """Receive and save label"""
     i_class = ImageClass.objects.filter(name=body.type).first()
     if not i_class:
         return response.HttpResponse(
@@ -96,7 +98,7 @@ def labeled_image(request, body: schemas.LabelInputBaseModel):
     if not user:
         return response.HttpResponse(
             status=401,
-            content=json.dumps({"message": "Image not found"}),
+            content=json.dumps({"message": "User not found"}),
             content_type='application/json'
         )
 

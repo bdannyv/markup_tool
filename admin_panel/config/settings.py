@@ -20,19 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET")
+SECRET_KEY = os.environ.get("DJANGO_SECRET", 'foo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', "0.0.0.0"]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-    '0.0.0.0',
-]
-
 CORS_ALLOWED_ORIGINS = ["http://0.0.0.0:80", "http://0.0.0.0:8000", "http://127.0.0.1:8080"]
+
+CSRF_TRUSTED_ORIGINS = []
+
+INTERNAL_IPS = ["127.0.0.1", '0.0.0.0']
 
 
 # Application definition
