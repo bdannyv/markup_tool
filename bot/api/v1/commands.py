@@ -28,7 +28,6 @@ async def retrieve_classes():
 
 @dp.message_handler(commands=['start'], state='*')
 async def process_start_command(message: types.Message, state: FSMContext):
-    await retrieve_classes()
     await state.reset_state()
     await message.reply(
         f"Hi, {message.from_user.first_name} {message.from_user.last_name}!", reply_markup=kb.greet_kb
