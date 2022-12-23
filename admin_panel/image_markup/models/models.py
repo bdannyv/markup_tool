@@ -25,7 +25,7 @@ class ImageTable(UUIDMixin, TimeStampMixin, models.Model):
     image_class = models.ManyToManyField("ImageClass", through="Label")
 
     def __str__(self):
-        return f"Image {self.id}"
+        return f"Image: {self.image.name}"
 
 
 # TODO: poor naming
